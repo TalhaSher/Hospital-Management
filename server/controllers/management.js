@@ -38,6 +38,24 @@ export const loginManagement = async (req, res) => {
   }
 };
 
+export const createDoctor = async (req, res) => {
+  try {
+    const data = req.body;
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(data.password, salt);
+
+    const doctor = new Doctor({
+      ...data,
+      password: passwordHash,
+      role: "doctor",
+    });
+    const newDoctor = await doctor.save();
+    res.status(200).json({ newDoctor });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const getdoctors = async (req, res) => {
   try {
     const doctors = await Doctor.find();
