@@ -18,3 +18,5 @@ router.post("/create/doctor", createDoctor);
 router.get("/doctors", getdoctors);
 
 router.get("/doctors/:id", getdoctor);
+
+export default router;

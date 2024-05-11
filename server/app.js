@@ -27,4 +27,12 @@ app.use(
   })
 );
 
+/* ROUTES */
+import doctorRoutes from "./routes/doctor.js";
+app.use("/doctor", doctorRoutes);
+import managementRoutes from "./routes/management.js";
+app.use("management", managementRoutes);
+import patientRoutes from "./routes/patient.js";
+app.use("/", patientRoutes);
+
 app.listen("3000", () => console.log("listening to port 3000"));

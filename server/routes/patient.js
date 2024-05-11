@@ -10,3 +10,5 @@ const router = express.Router();
 router.get("/doctors", getAllDoctors);
 router.get("/doctors/:id", getDoctor);
 router.post("/doctors/:id", setAppointment);
+
+export default router;
