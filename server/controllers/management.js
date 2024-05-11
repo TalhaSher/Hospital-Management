@@ -1,7 +1,7 @@
-import Management from "../models/Management";
+import Management from "../models/Management.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import Doctor from "../models/Doctor";
+import Doctor from "../models/Doctor.js";
 
 export const createManagement = async (req, res) => {
   try {

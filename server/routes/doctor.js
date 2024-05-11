@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import {
   doctorSignIn,
   getDashBoard,
@@ -7,8 +7,8 @@ import {
 
 const router = express.Router();
 
-Router.post("/SignIn", doctorSignIn);
-Router.get("/:doctorId/dashboard", getDashBoard);
-Router.get("/:doctorId/:appointmentId", getSingleAppointment);
+router.post("/SignIn", doctorSignIn);
+router.get("/:doctorId/dashboard", getDashBoard);
+router.get("/:doctorId/:appointmentId", getSingleAppointment);
 
 export default router;

@@ -3,7 +3,7 @@ import {
   getAllDoctors,
   getDoctor,
   setAppointment,
-} from "../controllers/patient";
+} from "../controllers/patient.js";
 
 const router = express.Router();
 

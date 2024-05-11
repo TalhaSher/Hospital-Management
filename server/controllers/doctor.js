@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import Appointment from "../models/Appointment.js";
 // SIGN IN
 
-const doctorSignIn = async (req, res) => {
+export const doctorSignIn = async (req, res) => {
   try {
     const { email, password } = req.body;
     const doctor = await Doctor.findOne({ email: email });
@@ -20,7 +20,7 @@ const doctorSignIn = async (req, res) => {
   }
 };
 
-const getDashBoard = async (req, res) => {
+export const getDashBoard = async (req, res) => {
   try {
     const { doctorId } = req.params;
     const doctor = Doctor.findById(doctorId).populate("appointments");
@@ -32,7 +32,7 @@ const getDashBoard = async (req, res) => {
   }
 };
 
-const getSingleAppointment = async (req, res) => {
+export const getSingleAppointment = async (req, res) => {
   try {
     const { doctorId, appointmentId } = req.params;
     const appointment = Appointment.findById(appointmentId);

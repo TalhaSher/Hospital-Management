@@ -39,6 +39,12 @@ const DoctorSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+      min: 20,
+      max: 180,
+    },
     phoneNo: {
       type: String,
       required: true,

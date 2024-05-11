@@ -1,5 +1,5 @@
-import Doctor from "../models/Doctor";
-import Appointment from "../models/Appointment";
+import Doctor from "../models/Doctor.js";
+import Appointment from "../models/Appointment.js";
 
 export const getAllDoctors = async (req, res) => {
   try {
