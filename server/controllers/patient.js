@@ -1,4 +1,3 @@
-import catchAsync from "../Middleware/catchAsync";
 import Doctor from "../models/Doctor";
 import Appointment from "../models/Appointment";
 
@@ -26,7 +25,7 @@ export const setAppointment = async (req, res) => {
     const doctorId = req.params;
     const doctor = Doctor.findById(doctorId);
     const appointment = new Appointment(req.body);
-    doctor.appointmets.push(appointment);
+    doctor.appointments.push(appointment);
     await doctor.save();
     await appointment.save();
     res.status(200).json("success");
