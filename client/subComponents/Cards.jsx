@@ -6,6 +6,7 @@ import {
   CardContent,
   Typography,
   Button,
+  Chip,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -38,12 +39,14 @@ const Cards = ({ data }) => {
             padding: "0.6rem 0",
           }}
         >
-          <Typography variant="body2" color="text.secondary">
+          <Chip label={data.doctorOf} />
+          {/* <Typography variant="body2" color="text.secondary">
             {data.doctorOf}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
+          </Typography> */}
+          <Chip label={data.education} />
+          {/* <Typography variant="body2" color="text.secondary">
             {data.education}
-          </Typography>
+          </Typography> */}
         </Box>
 
         {/* NAME */}

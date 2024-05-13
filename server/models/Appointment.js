@@ -25,10 +25,6 @@ const AppointmentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
-    type: Date,
-    required: true,
-  },
 });
 
 const Appointment = mongoose.model("Appointment", AppointmentSchema);

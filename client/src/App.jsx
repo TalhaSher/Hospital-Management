@@ -1,7 +1,9 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
-import MainPage from "../components/MainPage";
+import MainPage from "../components/patient/main/MainPage";
+import AppointmentPage from "../components/patient/doctor/AppointmentPage";
 import axios from "axios";
+import "./App.css";
 
 function App() {
   axios.defaults.baseURL = "http://localhost:3000";
@@ -12,7 +14,8 @@ function App() {
     <BrowserRouter>
       <CssBaseline />
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/doctors" element={<MainPage />} />
+        <Route path="/doctors/:id" element={<AppointmentPage />} />
       </Routes>
     </BrowserRouter>
   );

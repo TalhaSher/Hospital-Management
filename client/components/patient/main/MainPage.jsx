@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Cards from "../subComponents/Cards";
-import FlexCenter from "../subComponents/FlexCenter";
+import Cards from "../../../subComponents/Cards";
+import FlexCenter from "../../../subComponents/FlexCenter";
 import { Grid, Box, Typography } from "@mui/material";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import Filter from "./Filter";
 import Skeletons from "./Skeletons";
 
@@ -21,7 +21,6 @@ const MainPage = () => {
     setIsLoading(true);
     axios.get("/doctors").then((res) => {
       setDoctors(res.data.doctors);
-      // Initially set filtered doctors to all doctors
       setFilteredDoctors(res.data.doctors);
 
       setIsLoading(false);
@@ -30,13 +29,9 @@ const MainPage = () => {
 
   useEffect(() => {
     if (filter === "All") {
-      setIsLoading(true);
-      // If filter is "All", set filtered doctors to all doctors
       setFilteredDoctors(doctors);
-      setIsLoading(false);
     } else {
       setIsLoading(true);
-      // Otherwise, filter the doctors based on the selected filter
       const filtered = doctors.filter((doctor) => doctor.doctorOf === filter);
       setFilteredDoctors(filtered);
       setIsLoading(false);
@@ -44,7 +39,7 @@ const MainPage = () => {
   }, [doctors, filter]);
 
   return (
-    <>
+    <Box height="100%">
       <Navbar />
       <Filter filterChangeHandler={filterChangeHandler} />
       <FlexCenter>
@@ -80,7 +75,7 @@ const MainPage = () => {
           )}
         </Box>
       </FlexCenter>
-    </>
+    </Box>
   );
 };
 
