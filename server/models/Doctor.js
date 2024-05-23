@@ -1,5 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import Appointment from "./Appointment.js";
+const Schema = mongoose.Schema;
 
 const DoctorSchema = mongoose.Schema(
   {

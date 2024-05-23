@@ -7,7 +7,7 @@ import {
   userRegister,
   persistUser,
   userPersistent,
-} from "../controllers/patient.js";
+} from "../controllers/user.js";
 
 const router = express.Router();
 
