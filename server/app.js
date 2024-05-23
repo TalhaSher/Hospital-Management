@@ -45,7 +45,7 @@ app.use("/doctor", doctorRoutes);
 import managementRoutes from "./routes/management.js";
 app.use("management", managementRoutes);
 
-import patientRoutes from "./routes/patient.js";
-app.use("/", patientRoutes);
+import userRoutes from "./routes/user.js";
+app.use("/", userRoutes);
 
 app.listen("3000", () => console.log("listening to port 3000"));

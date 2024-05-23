@@ -7,7 +7,7 @@ import {
 
 const router = express.Router();
 
-router.post("/SignIn", doctorSignIn);
+router.post("/LogIn", doctorSignIn);
 router.get("/:doctorId/dashboard", getDashBoard);
 router.get("/:doctorId/:appointmentId", getSingleAppointment);
 
