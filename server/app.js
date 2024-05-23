@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import morgan from "morgan";
+import session from "session";
 
 dotenv.config();
 await mongoose.connect(process.env.DB_URL);
@@ -24,6 +25,16 @@ app.use(
   cors({
     credentials: true,
     origin: "*",
+  })
+);
+
+app.use(cookieParser());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: true,
+    resave: true,
+    maxAge: 2 * 60 * 1000,
   })
 );
 
