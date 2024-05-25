@@ -25,6 +25,10 @@ const appointmentSchema = yup.object().shape({
   gender: yup.string().required("required"),
   age: yup.number().required("required"),
   phoneNo: yup.string().required("required"),
+  appointmentDate: yup
+    .date()
+    .min(new Date(), "Appointment date cannot be in the past")
+    .required("required"),
 });
 
 const initialValueAppointment = {
@@ -33,6 +37,7 @@ const initialValueAppointment = {
   gender: "",
   age: 0,
   phoneNo: "",
+  appointmentDate: "", // Add the appointmentDate field
 };
 
 const AppointmentPage = () => {
@@ -60,6 +65,7 @@ const AppointmentPage = () => {
       setOpen(true);
     });
   };
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -196,7 +202,7 @@ const AppointmentPage = () => {
                         </Box>
                         <Box width={isNonMobile ? "100%" : "80%"}>
                           <TextField
-                            label="gender"
+                            label="Gender"
                             onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.gender}
@@ -210,7 +216,7 @@ const AppointmentPage = () => {
                         </Box>
                         <Box width={isNonMobile ? "100%" : "80%"}>
                           <TextField
-                            label="age"
+                            label="Age"
                             onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.age}
@@ -226,7 +232,7 @@ const AppointmentPage = () => {
                         </Box>
                         <Box width={isNonMobile ? "100%" : "80%"}>
                           <TextField
-                            label="phoneNo"
+                            label="Phone No"
                             onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.phoneNo}
@@ -236,6 +242,27 @@ const AppointmentPage = () => {
                               Boolean(errors.phoneNo)
                             }
                             helperText={touched.phoneNo && errors.phoneNo}
+                            sx={{ width: isNonMobile ? "100%" : "100%" }}
+                          />
+                        </Box>
+                        <Box width={isNonMobile ? "100%" : "80%"}>
+                          <TextField
+                            label="Appointment Date"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.appointmentDate}
+                            name="appointmentDate"
+                            type="date"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            error={
+                              Boolean(touched.appointmentDate) &&
+                              Boolean(errors.appointmentDate)
+                            }
+                            helperText={
+                              touched.appointmentDate && errors.appointmentDate
+                            }
                             sx={{ width: isNonMobile ? "100%" : "100%" }}
                           />
                         </Box>
@@ -265,7 +292,7 @@ const AppointmentPage = () => {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="you will recieve a call shortly !"
+        message="You will receive a call shortly!"
         action={action}
         sx={{
           backgroundColor: "white",

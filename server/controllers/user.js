@@ -9,24 +9,31 @@ export const userPersistent = (req, res, next) => {
     const token = req.cookies?.jwt;
     if (token) {
       try {
-        jwt.verify(token, process.env.SESSION_SECRET, {}, (err, user) => {
-          if (err) throw err;
-          req.session.USER = user;
-        });
-        next();
+        jwt.verify(
+          token,
+          process.env.SESSION_SECRET,
+          {},
+          (err, decodedUser) => {
+            if (err) return res.status(401).json({ msg: "Unauthorized" });
+            req.session.USER = decodedUser.user; // Ensure user is set correctly
+            next();
+          }
+        );
       } catch (error) {
-        res.status(401).json({ msg: err.message });
+        return res.status(401).json({ msg: "Unauthorized" });
       }
-      return;
     } else {
-      res.status(403).json({ message: "Please Login First" });
+      return res.status(403).json({ msg: "Please Login First" });
     }
+  } else {
+    next();
   }
 };
 
 export const persistUser = async (req, res) => {
   if (req.session.USER) {
-    const user = User.findById(req.session.USER._id);
+    let userId = req.session.USER._id;
+    const user = await User.findById(userId);
     res.status(200).json({ user });
   }
 };
@@ -34,10 +41,10 @@ export const persistUser = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = User.findOne({ email: email });
-    if (!user) return res.status(400).json({ msg: "User Does Not Exists." });
+    const user = await User.findOne({ email: email });
+    if (!user) return res.status(404).json({ msg: "User Does Not Exists." });
     const isMatch = bcrypt.compareSync(password, user.password);
-    if (isMatch) return res.status(400).json({ msg: "Invalid Credentials." });
+    if (!isMatch) return res.status(401).json({ msg: "Invalid Credentials." });
 
     req.session.USER = user;
 
@@ -48,13 +55,16 @@ export const userLogin = async (req, res) => {
         .json({ msg: "Login Successful", user });
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ msg: error.message });
   }
 };
 
 export const userRegister = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const isAccountInDatabase = await User.findOne({ email: email });
+    if (isAccountInDatabase)
+      return res.status(409).json({ msg: "Account Already Exists" });
     const salt = bcrypt.genSaltSync();
     const hashedPwd = bcrypt.hashSync(password, salt);
 
@@ -67,7 +77,7 @@ export const userRegister = async (req, res) => {
 
     res.status(200).json({ savedUser });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ msg: error.message });
   }
 };
 
@@ -76,7 +86,7 @@ export const getAllDoctors = async (req, res) => {
     const doctors = await Doctor.find();
     res.status(200).json({ doctors });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ msg: error.message });
   }
 };
 
@@ -86,25 +96,43 @@ export const getDoctor = async (req, res) => {
     const doctor = await Doctor.findById(id).populate("appointments");
     res.status(200).json({ doctor });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ msg: error.message });
   }
 };
 
 export const setAppointment = async (req, res) => {
   try {
     const loggedInUser = req.session.USER;
-    console.log(loggedInUser);
+    if (!loggedInUser) {
+      return res.status(401).json({ msg: "User not logged in" });
+    }
+
     const user = await User.findById(loggedInUser._id);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
     const { doctorId } = req.params;
     const doctor = await Doctor.findById(doctorId);
-    const appointment = await new Appointment(req.body.values);
-    console.log(appointment);
-    await doctor.appointments.push(appointment);
-    await user.appointments.push(appointment);
-    console.log(doctor);
+    if (!doctor) {
+      return res.status(404).json({ msg: "Doctor not found" });
+    }
+
+    const { values } = req.body;
+    const appointmentData = {
+      ...values,
+      appointmentDate: new Date(values.appointmentDate),
+    };
+
+    const appointment = new Appointment(appointmentData);
+
+    doctor.appointments.push(appointment);
+    user.appointments.push(appointment);
+
+    await appointment.save();
     await user.save();
     await doctor.save();
-    await appointment.save();
+
     res.status(200).json("success");
   } catch (error) {
     res.status(500).json({ msg: error.message });
