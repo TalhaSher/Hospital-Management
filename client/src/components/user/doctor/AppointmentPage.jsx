@@ -16,6 +16,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import Authenticator from "../../../auth/Authenticator";
 
 // APPOINTMENT SCHEMA
 
@@ -37,7 +38,7 @@ const initialValueAppointment = {
   gender: "",
   age: 0,
   phoneNo: "",
-  appointmentDate: "", // Add the appointmentDate field
+  appointmentDate: "",
 };
 
 const AppointmentPage = () => {
@@ -47,7 +48,6 @@ const AppointmentPage = () => {
   const { id } = useParams();
   const [doctor, setDoctor] = useState({});
   const [open, setOpen] = useState(false);
-  const [maxAppointments, setMaxAppointments] = useState();
 
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const fullName = doctor.firstName + " " + doctor.lastName;
@@ -55,7 +55,6 @@ const AppointmentPage = () => {
   useEffect(() => {
     axios.get(`/doctors/${id}`).then((res) => {
       setDoctor(res.data.doctor);
-      setMaxAppointments(res.data.doctor.appointments.length);
     });
   }, []);
 
@@ -92,7 +91,7 @@ const AppointmentPage = () => {
   );
 
   return (
-    <>
+    <Authenticator>
       <NavBar />
       <FlexCenter>
         <Box
@@ -122,12 +121,6 @@ const AppointmentPage = () => {
             <Typography variant="caption" color="text.secondary">
               {doctor.description}
             </Typography>
-            <Box>
-              <Typography variant="caption" color="red">
-                Remaining Appointments :{" "}
-                {doctor.maxAppointments - maxAppointments}
-              </Typography>
-            </Box>
           </Box>
 
           <Box>
@@ -299,7 +292,7 @@ const AppointmentPage = () => {
           color: "black",
         }}
       />
-    </>
+    </Authenticator>
   );
 };
 

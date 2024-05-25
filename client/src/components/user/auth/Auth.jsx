@@ -78,13 +78,6 @@ const Auth = () => {
     if (isRegister) await register(values, onSubmitProps);
   };
 
-  useEffect(() => {
-    console.log(isLoggedIn);
-    if (isLoggedIn) {
-      Navigate("/doctors");
-    }
-  }, []);
-
   return (
     <>
       <Formik

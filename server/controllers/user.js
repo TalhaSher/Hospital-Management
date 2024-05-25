@@ -15,7 +15,7 @@ export const userPersistent = (req, res, next) => {
           {},
           (err, decodedUser) => {
             if (err) return res.status(401).json({ msg: "Unauthorized" });
-            req.session.USER = decodedUser.user; // Ensure user is set correctly
+            req.session.USER = decodedUser.user;
             next();
           }
         );
@@ -122,10 +122,10 @@ export const setAppointment = async (req, res) => {
     const appointmentData = {
       ...values,
       appointmentDate: new Date(values.appointmentDate),
+      doctor: doctor._id,
     };
 
     const appointment = new Appointment(appointmentData);
-
     doctor.appointments.push(appointment);
     user.appointments.push(appointment);
 
@@ -134,6 +134,32 @@ export const setAppointment = async (req, res) => {
     await doctor.save();
 
     res.status(200).json("success");
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getUserAppointments = async (req, res) => {
+  try {
+    const loggedInUser = req.session.USER;
+
+    if (!loggedInUser) {
+      return res.status(401).json({ msg: "User not logged in" });
+    }
+
+    const user = await User.findById(loggedInUser._id)
+      .populate({
+        path: "appointments",
+        populate: {
+          path: "doctor",
+        },
+      })
+      .exec();
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    res.status(200).json({ user: user });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

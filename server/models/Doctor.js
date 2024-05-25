@@ -51,10 +51,6 @@ const DoctorSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    maxAppointments: {
-      type: Number,
-      required: true,
-    },
     appointments: [
       {
         type: Schema.Types.ObjectId,
@@ -73,6 +69,6 @@ DoctorSchema.post("findOneAndDelete", async (doc) => {
   }
 });
 
-const Doctor = mongoose.model("Doctor", DoctorSchema);
+const Doctor = mongoose.models.Doctor || mongoose.model("Doctor", DoctorSchema);
 
 export default Doctor;

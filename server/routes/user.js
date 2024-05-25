@@ -7,6 +7,7 @@ import {
   userRegister,
   persistUser,
   userPersistent,
+  getUserAppointments,
 } from "../controllers/user.js";
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 router.get("/", userPersistent, persistUser);
 router.get("/doctors", getAllDoctors);
 router.get("/doctors/:id", getDoctor);
+router.get("/appointments", getUserAppointments);
 router.post("/doctors/:doctorId", setAppointment);
 router.post("/login", userLogin);
 router.post("/register", userRegister);
