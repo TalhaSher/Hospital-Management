@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import AppointmentCard from "./AppointmentCard";
 import Authenticator from "../../../auth/Authenticator";
+import Navigation from "../navigation/Navigation";
 
 const Appointment = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,10 +25,6 @@ const Appointment = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <Authenticator>
       <Box
@@ -44,6 +41,7 @@ const Appointment = () => {
           {!isLoading ? <AppointmentCard user={data} /> : <p>Loading</p>}
         </Box>
       </Box>
+      <Navigation />
     </Authenticator>
   );
 };

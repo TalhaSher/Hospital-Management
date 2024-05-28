@@ -35,6 +35,8 @@ const AppointmentSchema = mongoose.Schema({
   appointmentDate: {
     type: Date,
     required: true,
+    autoIndex: true, // Create an index for efficient queries
+    expireAfterSeconds: 0,
   },
 });
 

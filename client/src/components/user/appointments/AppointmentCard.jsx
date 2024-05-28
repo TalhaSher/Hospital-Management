@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, Button, Modal } from "@mui/material";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const AppointmentCard = ({ user }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -14,14 +16,29 @@ const AppointmentCard = ({ user }) => {
     setSelectedAppointment(null);
     setOpenModal(false);
   };
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
+  const deleteAppointment = async (id) => {
+    try {
+      const res = await axios.delete(`/appointment/${id}`);
+      if (res.status === 200) {
+        toast.success("Appointment Deleted");
+        setSelectedAppointment(null);
+        setOpenModal(false);
+        window.location.reload();
+      }
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.msg) {
+        toast.error(error.response.data.msg);
+      } else {
+        console.error("Error:", error);
+        toast.error("An error occurred. Please try again later.");
+      }
+    }
+  };
   return (
     <Box>
       {user.appointments.length ? (
-        user.appointments.map((appointment) => (
+        user.appointments.map((appointment, index) => (
           <Box
             key={appointment._id}
             mb={2}
@@ -29,6 +46,7 @@ const AppointmentCard = ({ user }) => {
             border="1px solid #ccc"
             borderRadius={1}
           >
+            <Typography variant="h6">Appointment # 0{index + 1}</Typography>
             <Typography variant="h6">
               {appointment.firstName} {appointment.lastName}
             </Typography>
@@ -86,8 +104,12 @@ const AppointmentCard = ({ user }) => {
           <Button onClick={handleModalClose} color="success" variant="outlined">
             Close
           </Button>
-          <Button color="error" variant="outlined">
-            Delete
+          <Button
+            color="error"
+            variant="outlined"
+            onClick={() => deleteAppointment(selectedAppointment._id)}
+          >
+            Cancel Appointment
           </Button>
         </Box>
       </Modal>

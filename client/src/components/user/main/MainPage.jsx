@@ -8,6 +8,7 @@ import Filter from "./Filter";
 import Skeletons from "./Skeletons";
 import Authenticator from "../../../auth/Authenticator";
 import { useSelector } from "react-redux";
+import Navigation from "../navigation/Navigation";
 
 const MainPage = () => {
   const [doctors, setDoctors] = useState([]);
@@ -46,7 +47,8 @@ const MainPage = () => {
         <Navbar />
         <Filter filterChangeHandler={filterChangeHandler} />
         <FlexCenter>
-          <Box width="80%">
+          <Box width="80%" sx={{ paddingBottom: "56px" }}>
+            {/* Add paddingBottom to ensure content is not hidden behind the fixed navigation */}
             {isLoading && (
               <>
                 <Skeletons />
@@ -79,6 +81,7 @@ const MainPage = () => {
           </Box>
         </FlexCenter>
       </Box>
+      <Navigation />
     </Authenticator>
   );
 };

@@ -164,3 +164,25 @@ export const getUserAppointments = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
+
+export const deleteAppointment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Appointment.findByIdAndDelete(id);
+    res.status(200).json({ message: "Appointment deleted successfully" });
+
+    const user = await User.findOneAndUpdate(
+      { appointments: id },
+      { $pull: { appointments: id } },
+      { new: true }
+    );
+    const doctor = await Doctor.findOneAndUpdate(
+      { appointments: id },
+      { $pull: { appointments: id } },
+      { new: true }
+    );
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
