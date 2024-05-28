@@ -35,6 +35,7 @@ const AppointmentCard = ({ user }) => {
       }
     }
   };
+
   return (
     <Box>
       {user.appointments.length ? (
@@ -45,19 +46,22 @@ const AppointmentCard = ({ user }) => {
             p={2}
             border="1px solid #ccc"
             borderRadius={1}
+            sx={{
+              backgroundColor:
+                appointment.status === "approved"
+                  ? "lightgreen"
+                  : appointment.status === "declined"
+                  ? "lightcoral"
+                  : "white",
+            }}
           >
             <Typography variant="h6">Appointment # 0{index + 1}</Typography>
             <Typography variant="h6">
               {appointment.firstName} {appointment.lastName}
             </Typography>
             <Typography>Appointment ID: {appointment._id}</Typography>
-            <Typography>
-              Doctor: {appointment.doctor.firstName}{" "}
-              {appointment.doctor.lastName}
-            </Typography>
-            <Typography>
-              Date: {new Date(appointment.appointmentDate).toLocaleDateString()}
-            </Typography>
+
+            <Typography>Status: {appointment.status}</Typography>
             <Button onClick={() => handleModalOpen(appointment)}>
               Open Modal
             </Button>
@@ -101,6 +105,9 @@ const AppointmentCard = ({ user }) => {
                 selectedAppointment.appointmentDate
               ).toLocaleDateString()}
           </Typography>
+          <Typography>
+            Status: {selectedAppointment && selectedAppointment.status}
+          </Typography>
           <Button onClick={handleModalClose} color="success" variant="outlined">
             Close
           </Button>
@@ -118,44 +125,3 @@ const AppointmentCard = ({ user }) => {
 };
 
 export default AppointmentCard;
-
-// {
-//     "_id": "66512cb0f330f0b5437b6319",
-//     "role": "user",
-//     "email": "xexcalibur9090@gmail.com",
-//     "password": "$2b$10$hDs4o00qBgvN/gip/gEhyOi4RwMi6VrqlFmQ41QH7TXuI8XRJQVZO",
-//     "appointments": [
-//         {
-//             "_id": "665242a85f93a0e145ca0883",
-//             "firstName": "Talha",
-//             "lastName": "Sher",
-//             "gender": "Male",
-//             "age": 20,
-//             "phoneNo": "03182134928347",
-//             "doctor": {
-//                 "_id": "6640c9c5700b134e2a9b6bad",
-//                 "role": "doctor",
-//                 "firstName": "Talha",
-//                 "lastName": "Khan",
-//                 "email": "talhasher1232@gmail.com",
-//                 "password": "$2b$10$QnKSuDxuB3CUOEnJvpWAs.nIe7jGg0MtoAyl3wWhK60CHPAqJ70ni",
-//                 "doctorOf": "Plastic Surgeon",
-//                 "education": "PHD",
-//                 "description": "I am the best doctor there is, Ofcourse i will over charge you but it will be worth it. I will definitly charge more than 5000rs a session cuz im the best, im can not be replaced",
-//                 "phoneNo": "03166394336",
-//                 "maxAppointments": 30,
-//                 "createdAt": "2024-05-12T13:53:09.849Z",
-//                 "updatedAt": "2024-05-25T19:57:29.013Z",
-//                 "__v": 3,
-//                 "appointments": [
-//                     "66514f49f4a44aba3b822578",
-//                     "665240751198141db701f6f3",
-//                     "665242a85f93a0e145ca0883"
-//                 ]
-//             },
-//             "appointmentDate": "2024-05-27T00:00:00.000Z",
-//             "__v": 0
-//         }
-//     ],
-//     "__v": 4
-// }

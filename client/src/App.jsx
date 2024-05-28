@@ -27,7 +27,7 @@ function App() {
 
         {/* DOCTOR ROUTES */}
         <Route path="/doctor/login" element={<DoctorAuthPage />} />
-        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+        <Route path="/doctor/:id/dashboard" element={<DoctorDashboard />} />
         <Route path="*" element={<p>404 Not Found</p>} />
       </Routes>
     </BrowserRouter>

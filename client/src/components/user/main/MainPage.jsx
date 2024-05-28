@@ -3,7 +3,7 @@ import axios from "axios";
 import Cards from "../../../subComponents/Cards";
 import FlexCenter from "../../../subComponents/FlexCenter";
 import { Grid, Box, Typography } from "@mui/material";
-import Navbar from "../Navbar";
+import Navbar from "../../Navbar";
 import Filter from "./Filter";
 import Skeletons from "./Skeletons";
 import Authenticator from "../../../auth/Authenticator";

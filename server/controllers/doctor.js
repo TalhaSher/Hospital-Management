@@ -29,10 +29,10 @@ export const doctorSignIn = async (req, res) => {
 export const getDashBoard = async (req, res) => {
   try {
     const { doctorId } = req.params;
-    const doctor = Doctor.findById(doctorId).populate("appointments");
-    const appointments = doctor.appointments;
 
-    res.status(200).json({ doctor, appointments });
+    const doctor = await Doctor.findById(doctorId).populate("appointments");
+
+    res.status(200).json({ doctor });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -48,5 +48,26 @@ export const getSingleAppointment = async (req, res) => {
     res.status(200).json({ appointment });
   } catch (error) {
     res.status(500).json({ msg: error.message });
+  }
+};
+
+export const appointmentStatus = async (req, res) => {
+  try {
+    const appointmentId = req.params.id;
+    const { status } = req.body;
+
+    const appointment = await Appointment.findByIdAndUpdate(
+      appointmentId,
+      { status },
+      { new: true }
+    );
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    res.json({ message: "Appointment status updated", appointment });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
   }
 };

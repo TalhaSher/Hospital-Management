@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   Snackbar,
 } from "@mui/material";
-import NavBar from "../Navbar";
+import NavBar from "../../Navbar";
 import axios from "axios";
 import FlexCenter from "../../../subComponents/FlexCenter";
 import { Formik } from "formik";

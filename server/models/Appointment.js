@@ -31,12 +31,13 @@ const AppointmentSchema = mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "Doctor",
   },
-
+  status: {
+    type: String,
+    default: "pending",
+  },
   appointmentDate: {
     type: Date,
     required: true,
-    autoIndex: true, // Create an index for efficient queries
-    expireAfterSeconds: 0,
   },
 });
 

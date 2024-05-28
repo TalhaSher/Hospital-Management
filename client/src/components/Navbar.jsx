@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import FlexCenter from "../../subComponents/FlexCenter";
+import FlexCenter from "../subComponents/FlexCenter";
 
 const NavBar = () => {
   return (

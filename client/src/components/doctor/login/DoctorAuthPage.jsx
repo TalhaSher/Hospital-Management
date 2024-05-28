@@ -34,7 +34,7 @@ const DoctorAuthPage = () => {
         dispatch(setIsLoggedIn({ isLoggedIn: true }));
         dispatch(setUser({ user: response.data.user }));
         dispatch(setRole({ role: "doctor" }));
-        Navigate("/doctor/dashboard");
+        Navigate(`/doctor/${response.data.doctor._id}/dashboard`);
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.msg) {
