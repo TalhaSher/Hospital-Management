@@ -25,41 +25,49 @@ const Navigation = () => {
   return (
     <Box
       sx={{
-        width: "100%",
+        width: "100vw",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         position: "fixed",
         bottom: 0,
-        left: 0,
         zIndex: 1000,
       }}
     >
-      <BottomNavigation
-        value={value}
-        onChange={(event, newValue) => handleChange(event, newValue)}
+      <Box
         sx={{
-          background: "rgba(53, 231, 255, 0.7)",
-          borderRadius: "16px",
-          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-          backdropFilter: "blur(8.1px)",
-          WebkitBackdropFilter: "blur(8.1px)",
-          border: "1px solid rgba(255, 255, 255, 0.14)",
+          width: "80%",
         }}
       >
-        <BottomNavigationAction
-          label="Doctors"
-          value="/doctors"
-          icon={<LocalHospitalIcon />}
-        />
-        <BottomNavigationAction
-          label="Appointments"
-          value="/appointments"
-          icon={<EventAvailableIcon />}
-        />
-        <BottomNavigationAction
-          label="Prescriptions"
-          value="/prescriptions"
-          icon={<DescriptionIcon />}
-        />
-      </BottomNavigation>
+        <BottomNavigation
+          value={value}
+          onChange={(event, newValue) => handleChange(event, newValue)}
+          sx={{
+            background: "rgba(53, 231, 255, 0.7)",
+            borderRadius: "16px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(8.1px)",
+            WebkitBackdropFilter: "blur(8.1px)",
+            border: "1px solid rgba(255, 255, 255, 0.14)",
+          }}
+        >
+          <BottomNavigationAction
+            label="Doctors"
+            value="/doctors"
+            icon={<LocalHospitalIcon />}
+          />
+          <BottomNavigationAction
+            label="Appointments"
+            value="/appointments"
+            icon={<EventAvailableIcon />}
+          />
+          <BottomNavigationAction
+            label="Prescriptions"
+            value="/prescriptions"
+            icon={<DescriptionIcon />}
+          />
+        </BottomNavigation>
+      </Box>
     </Box>
   );
 };

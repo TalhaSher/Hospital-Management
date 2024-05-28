@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsLoggedIn, setUser } from "../Store/authSlice";
+import { setIsLoggedIn, setUser, setRole } from "../Store/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const Authenticator = ({ children }) => {
@@ -16,8 +16,10 @@ const Authenticator = ({ children }) => {
   const loginUser = async () => {
     try {
       const res = await axios.get("/", {}, { headers });
+      if (res.data.user == null) return NavigateTo("/login");
       dispatch(setUser({ user: res.data.user }));
       dispatch(setIsLoggedIn({ isLoggedIn: true }));
+      dispatch(setRole({ role: res.data.user.role }));
     } catch (err) {
       if (err.response.status === 403 || 401) {
         dispatch(setIsLoggedIn({ isLoggedIn: false }));

@@ -17,6 +17,7 @@ import * as yup from "yup";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Authenticator from "../../../auth/Authenticator";
+import Navigation from "../navigation/Navigation";
 
 // APPOINTMENT SCHEMA
 
@@ -292,6 +293,7 @@ const AppointmentPage = () => {
           color: "black",
         }}
       />
+      <Navigation />
     </Authenticator>
   );
 };

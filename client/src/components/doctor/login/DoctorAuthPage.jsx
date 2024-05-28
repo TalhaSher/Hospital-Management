@@ -8,20 +8,11 @@ import { setIsLoggedIn, setUser, setRole } from "../../../Store/authSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const registerSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
-});
-
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
 });
 
-const initialValuesRegister = {
-  email: "",
-  password: "",
-};
 const initialValuesLogin = {
   email: "",
   password: "",
@@ -31,40 +22,19 @@ const headers = {
   "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
 };
 
-const Auth = () => {
-  const [pageType, setPageType] = useState("login");
+const DoctorAuthPage = () => {
   const dispatch = useDispatch();
-  const isLogin = pageType === "login";
-  const isRegister = pageType === "register";
   const Navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  const register = async (values, onSubmitProps) => {
-    try {
-      const response = await axios.post("/register", values, { headers });
-      if (response.status === 200) {
-        toast.success("Successfully signed up user");
-        Navigate("/login");
-        onSubmitProps.resetForm();
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        toast.error("User Already Exists");
-      } else if (error.response && error.response.status === 500) {
-        toast.error("Internal Server Error");
-      }
-    }
-  };
 
   const login = async (values, onSubmitProps) => {
     try {
-      const response = await axios.post("/login", values, { headers });
+      const response = await axios.post("/doctor/login", values, { headers });
       if (response.status === 200) {
         toast.success("Login Successful");
         dispatch(setIsLoggedIn({ isLoggedIn: true }));
         dispatch(setUser({ user: response.data.user }));
-        dispatch(setRole({ role: "user" }));
-        Navigate("/doctors");
+        dispatch(setRole({ role: "doctor" }));
+        Navigate("/doctor/dashboard");
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.msg) {
@@ -76,16 +46,15 @@ const Auth = () => {
   };
 
   const submitFormHandler = async (values, onSubmitProps) => {
-    if (isLogin) await login(values, onSubmitProps);
-    if (isRegister) await register(values, onSubmitProps);
+    await login(values, onSubmitProps);
   };
 
   return (
     <>
       <Formik
         onSubmit={submitFormHandler}
-        initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
-        validationSchema={isLogin ? loginSchema : registerSchema}
+        initialValues={initialValuesLogin}
+        validationSchema={loginSchema}
       >
         {({
           values,
@@ -123,7 +92,7 @@ const Auth = () => {
                 }}
               >
                 <Typography sx={{ marginBottom: "1rem" }}>
-                  {isLogin ? "User Login" : "User Register"}
+                  Doctor's Login
                 </Typography>
                 <Box>
                   <TextField
@@ -158,25 +127,6 @@ const Auth = () => {
                     }}
                   />
                 </Box>
-                <Box>
-                  <Typography
-                    onClick={() => {
-                      setPageType(isLogin ? "register" : "login");
-                      resetForm();
-                    }}
-                    sx={{
-                      color: "blue",
-                      textDecoration: "underline",
-                      "&:hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    {isLogin
-                      ? "Don't have an account? Sign Up here."
-                      : "Already have an account? Login here."}
-                  </Typography>
-                </Box>
 
                 <Button
                   fullWidth
@@ -187,7 +137,7 @@ const Auth = () => {
                     p: "1rem",
                   }}
                 >
-                  {isLogin ? "LOGIN" : "REGISTER"}
+                  LOGIN
                 </Button>
               </Box>
             </Box>
@@ -198,4 +148,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default DoctorAuthPage;

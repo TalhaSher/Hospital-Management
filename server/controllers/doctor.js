@@ -13,8 +13,14 @@ export const doctorSignIn = async (req, res) => {
     const isMatch = await bcrypt.compare(password, doctor.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid Credentials." });
 
-    const token = jwt.sign({ id: doctor._id }, process.env.JWT_SECRET);
-    res.status(200).json({ token, doctor });
+    req.session.USER = doctor;
+
+    jwt.sign({ doctor }, process.env.JWT_SECRET, {}, (err, token) => {
+      res
+        .cookie("jwt", token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true })
+        .status(200)
+        .json({ msg: "Login Successful", doctor });
+    });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

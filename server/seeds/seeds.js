@@ -53,7 +53,7 @@ const doctorTypes = [
   "Vascular Surgeon",
 ];
 
-const password = "yourpassword";
+const password = "talha";
 
 const seedDB = async () => {
   await Doctor.deleteMany({});
