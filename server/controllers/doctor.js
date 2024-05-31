@@ -2,7 +2,44 @@ import Doctor from "../models/Doctor.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Appointment from "../models/Appointment.js";
-// SIGN IN
+
+export const doctorPersistent = (req, res, next) => {
+  if (!req.session.USER) {
+    const token = req.cookies?.jwt;
+    if (token) {
+      try {
+        jwt.verify(
+          token,
+          process.env.SESSION_SECRET,
+          {},
+          (err, decodedUser) => {
+            if (err) return res.status(401).json({ msg: "Unauthorized" });
+            if (decodedUser.user.role == "doctor") {
+              req.session.USER = decodedUser.user;
+            }
+            next();
+          }
+        );
+      } catch (error) {
+        return res.status(401).json({ msg: "Unauthorized" });
+      }
+    } else {
+      return res.status(403).json({ msg: "Please Login First" });
+    }
+  } else {
+    next();
+  }
+};
+
+export const persistDoctor = async (req, res) => {
+  if (req.session.USER) {
+    if (req.session.USER.role == "doctor") {
+      let userId = req.session.USER._id;
+      const user = await Doctor.findById(userId);
+      res.status(200).json({ user });
+    }
+  }
+};
 
 export const doctorSignIn = async (req, res) => {
   try {

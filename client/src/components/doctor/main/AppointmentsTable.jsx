@@ -14,8 +14,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const AppointmentsTable = ({ appointments }) => {
-  console.log(appointments);
-
   const handleStatusChange = async (appointmentId, status) => {
     try {
       await axios.patch(`/doctor/appointment/${appointmentId}`, { status });
