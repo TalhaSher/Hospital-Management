@@ -2,6 +2,7 @@ import Management from "../models/Management.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import Doctor from "../models/Doctor.js";
+import Appointment from "../models/Appointment.js";
 
 export const createManagement = async (req, res) => {
   try {
@@ -31,7 +32,7 @@ export const loginManagement = async (req, res) => {
     const isMatch = bcrypt.compare(password, management.password);
     if (!isMatch) return res.status(400).json({ msg: "invalid Credentials" });
 
-    const token = jwt.sign({ id: management._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(management, process.env.JWT_SECRET);
     res.status(200).json({ token, management });
   } catch (error) {
     res.status(500).json({ msg: error.message });
@@ -70,6 +71,15 @@ export const getdoctor = async (req, res) => {
     const id = req.params;
     const doctor = Doctor.findById(id).populate("appointments");
     res.status(200).json({ doctor });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getappointments = async (req, res) => {
+  try {
+    const appointments = await Appointment.find();
+    res.status(200).json({ appointments });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

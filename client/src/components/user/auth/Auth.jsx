@@ -37,7 +37,6 @@ const Auth = () => {
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
   const Navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const register = async (values, onSubmitProps) => {
     try {

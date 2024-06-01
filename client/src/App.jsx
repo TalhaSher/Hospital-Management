@@ -9,6 +9,8 @@ import AuthPage from "./components/user/auth/Auth";
 import Appointment from "./components/user/appointments/Appointment";
 import DoctorAuthPage from "./components/doctor/login/DoctorAuthPage";
 import DoctorDashboard from "./components/doctor/main/DoctorDashboard";
+import ManagementAuthPage from "./components/management/login/ManagementAuthPage";
+import Dashboard from "./components/management/main/Dashboard";
 
 function App() {
   axios.defaults.baseURL = "http://localhost:3000";
@@ -28,6 +30,12 @@ function App() {
         {/* DOCTOR ROUTES */}
         <Route path="/doctor/login" element={<DoctorAuthPage />} />
         <Route path="/doctor/:id/dashboard" element={<DoctorDashboard />} />
+
+        {/* MANAGEMENT ROUTES */}
+        <Route path="/management/login" element={<ManagementAuthPage />} />
+        <Route path="/management/:id/dashboard" element={<Dashboard />} />
+
+        {/* * */}
         <Route path="*" element={<p>404 Not Found</p>} />
       </Routes>
     </BrowserRouter>

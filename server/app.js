@@ -44,7 +44,7 @@ import doctorRoutes from "./routes/doctor.js";
 app.use("/doctor", doctorRoutes);
 
 import managementRoutes from "./routes/management.js";
-app.use("management", managementRoutes);
+app.use("/management", managementRoutes);
 
 import userRoutes from "./routes/user.js";
 app.use("/", userRoutes);
