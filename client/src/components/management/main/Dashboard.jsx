@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Box, CssBaseline } from "@mui/material";
 import NavBar from "../../Navbar";
 import ManagementCard from "../extras/ManagementCard";
+import DoctorsTable from "../extras/DoctorsTable";
 
 const Dashboard = () => {
   const { id } = useParams();
@@ -27,12 +28,13 @@ const Dashboard = () => {
   return (
     <>
       <CssBaseline />
-      <Box sx={{ width: "100vw", height: "100vh", backgroundColor: "white" }}>
+      <Box sx={{ width: "100vw", backgroundColor: "white" }}>
         <NavBar />
         <ManagementCard
           doctorslength={doctorsLength}
           appointmentslength={appointmentsLength}
         />
+        <DoctorsTable doctors={doctors} />
       </Box>
     </>
   );

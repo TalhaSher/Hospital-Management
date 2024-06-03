@@ -6,6 +6,7 @@ import {
   getdoctors,
   getdoctor,
   getappointments,
+  deleteDoctor,
 } from "../controllers/management.js";
 
 const router = express.Router();
@@ -21,5 +22,7 @@ router.get("/doctors", getdoctors);
 router.get("/getappointments", getappointments);
 
 router.get("/doctors/:id", getdoctor);
+
+router.delete("/deleteDoctor/:id", deleteDoctor);
 
 export default router;
