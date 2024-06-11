@@ -13,6 +13,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setIsLoggedIn, setUser, setRole } from "../../../Store/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -22,8 +23,9 @@ const headers = {
 
 const ManagementAuthPage = () => {
   const dispatch = useDispatch();
+  const Navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
@@ -32,12 +34,13 @@ const ManagementAuthPage = () => {
         password: data.get("password"),
       };
 
-      const response = axios.post("management/login", values, headers);
+      const response = await axios.post("management/login", values, headers);
       if (response.status === 200) {
         toast.success("Login Successful");
         dispatch(setIsLoggedIn({ isLoggedIn: true }));
-        dispatch(setUser({ user: response.data.user }));
+        dispatch(setUser({ user: response.data.management }));
         dispatch(setRole({ role: "management" }));
+        Navigate(`/management/${response.data.management._id}/dashboard`);
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.msg) {
