@@ -28,11 +28,9 @@ export const doctorPersistent = (req, res, next) => {
 
 export const persistDoctor = async (req, res) => {
   if (req.session.USER) {
-    if (req.session.USER.role == "doctor") {
-      let userId = req.session.USER._id;
-      const user = await Doctor.findById(userId);
-      res.status(200).json({ user });
-    }
+    let userId = req.session.USER._id;
+    const user = await Doctor.findById(userId);
+    res.status(200).json({ user });
   }
 };
 

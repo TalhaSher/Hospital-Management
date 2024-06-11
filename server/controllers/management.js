@@ -30,11 +30,9 @@ export const managementPersistent = (req, res, next) => {
 
 export const persistManagement = async (req, res) => {
   if (req.session.USER) {
-    if (req.session.USER.role == "management") {
-      let userId = req.session.USER._id;
-      const user = await Management.findById(userId);
-      res.status(200).json({ user });
-    }
+    let userId = req.session.USER._id;
+    const user = await Management.findById(userId);
+    res.status(200).json({ user });
   }
 };
 
