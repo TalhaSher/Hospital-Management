@@ -7,9 +7,13 @@ import {
   getdoctor,
   getappointments,
   deleteDoctor,
+  managementPersistent,
+  persistManagement,
 } from "../controllers/management.js";
 
 const router = express.Router();
+
+router.get("/", managementPersistent, persistManagement);
 
 router.post("/create/management", createManagement);
 

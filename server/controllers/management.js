@@ -5,6 +5,39 @@ import Doctor from "../models/Doctor.js";
 import Appointment from "../models/Appointment.js";
 import User from "../models/User.js";
 
+export const managementPersistent = (req, res, next) => {
+  if (!req.session.USER) {
+    const token = req.cookies?.jwt;
+    if (token) {
+      try {
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, decodedUser) => {
+          if (err) return res.status(401).json({ msg: "Unauthorized" });
+          if (decodedUser.management.role == "management") {
+            req.session.USER = decodedUser.management;
+          }
+          next();
+        });
+      } catch (error) {
+        return res.status(401).json({ msg: "Unauthorized" });
+      }
+    } else {
+      return res.status(403).json({ msg: "Please Login First" });
+    }
+  } else {
+    next();
+  }
+};
+
+export const persistManagement = async (req, res) => {
+  if (req.session.USER) {
+    if (req.session.USER.role == "management") {
+      let userId = req.session.USER._id;
+      const user = await Management.findById(userId);
+      res.status(200).json({ user });
+    }
+  }
+};
+
 export const createManagement = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -17,7 +50,7 @@ export const createManagement = async (req, res) => {
       password: passwordHash,
     });
     const newManagement = await management.save();
-    res.status(200).json(newManagement);
+    res.status(200).json({ management: newManagement });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -26,15 +59,23 @@ export const createManagement = async (req, res) => {
 export const loginManagement = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const management = Management.findOne({ email: email });
-    if (!management)
+
+    const management = await Management.findOne({ email: email });
+    if (!management || management == null)
       return res.status(400).json({ msg: "Management Account Not Found !" });
 
-    const isMatch = bcrypt.compare(password, management.password);
+    const isMatch = bcrypt.compareSync(password, management.password);
+
     if (!isMatch) return res.status(400).json({ msg: "invalid Credentials" });
 
-    const token = jwt.sign(management, process.env.JWT_SECRET);
-    res.status(200).json({ token, management });
+    req.session.USER = management;
+
+    jwt.sign({ management }, process.env.JWT_SECRET, {}, (err, token) => {
+      res
+        .cookie("jwt", token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true })
+        .status(200)
+        .json({ msg: "Login Successful", management });
+    });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -43,7 +84,6 @@ export const loginManagement = async (req, res) => {
 export const createDoctor = async (req, res) => {
   try {
     const { doctor } = req.body;
-    console.log(doctor);
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(doctor.password, salt);
 
@@ -91,13 +131,12 @@ export const deleteDoctor = async (req, res) => {
   try {
     const { id } = req.params;
     const doctor = await Doctor.findByIdAndDelete(id).populate("appointments");
-    console.log(doctor);
     if (doctor) {
       const appointmentIds = doctor.appointments.map(
         (appointment) => appointment._id
       );
 
-      for (const appointmentId of appointmentIds) {
+      for (let appointmentId of appointmentIds) {
         await User.findOneAndUpdate(
           { appointments: appointmentId },
           { $pull: { appointments: appointmentId } },

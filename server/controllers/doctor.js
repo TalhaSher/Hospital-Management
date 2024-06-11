@@ -8,18 +8,13 @@ export const doctorPersistent = (req, res, next) => {
     const token = req.cookies?.jwt;
     if (token) {
       try {
-        jwt.verify(
-          token,
-          process.env.SESSION_SECRET,
-          {},
-          (err, decodedUser) => {
-            if (err) return res.status(401).json({ msg: "Unauthorized" });
-            if (decodedUser.user.role == "doctor") {
-              req.session.USER = decodedUser.user;
-            }
-            next();
+        jwt.verify(token, process.env.JWT_SECRET, {}, (err, decodedUser) => {
+          if (err) return res.status(401).json({ msg: "Unauthorized" });
+          if (decodedUser.doctor.role == "doctor") {
+            req.session.USER = decodedUser.doctor;
           }
-        );
+          next();
+        });
       } catch (error) {
         return res.status(401).json({ msg: "Unauthorized" });
       }
